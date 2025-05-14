@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vintage Audio Player</title>
+	<link rel="stylesheet" href="style.css"
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+
+	<style>
+		
+	</style>
+
+</head>
+
+<body>
+
+	<div class="vintage-player">
+		<audio id="audio-element" preload="metadata"></audio>
+		<div class="artwork-section">
+			<img id="artwork" src="https://i.postimg.cc/VvLYxh6Y/Gramophone-Disk.png" alt="Album Artwork">
+			<div class="metadata">
+				<p id="track-title">Track Title</p>
+				<p id="artist-name">Artist Name</p>
+				<p id="album-title">Album Title</p>
+			</div>
+		</div>
+
+		<div class="progress-section">
+			<span id="current-time">0:00</span>
+			<div class="progress-bar-container" id="progress-bar-container">
+				<div class="progress-bar-fill" id="progress-bar-fill">
+					<div class="progress-bar-knob" id="progress-bar-knob"></div>
+				</div>
+			</div>
+			<span id="duration">0:00</span>
+		</div>
+
+		<div class="analyzer-section">
+			<canvas id="analyzer-canvas"></canvas>
+		</div>
+
+		<div class="controls-section">
+			<button id="shuffle-btn" title="Shuffle"><i class="fas fa-random"></i></button>
+			<button id="prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
+			<button id="play-pause-btn" title="Play"><i class="fas fa-play"></i></button>
+			<button id="next-btn" title="Next"><i class="fas fa-step-forward"></i></button>
+			<button id="loop-btn" title="Loop Off"><i class="fas fa-rotate-right"></i></button> <button id="eq-toggle-btn"
+				title="Equalizer"><i class="fas fa-sliders-h"></i></button>
+			<button id="playlist-toggle-btn" title="Playlist"><i class="fas fa-list"></i></button>
+		</div>
+
+		<div class="volume-section">
+			<button id="mute-btn" title="Mute"><i class="fas fa-volume-up"></i></button>
+			<div class="volume-slider-container" id="volume-slider-container">
+				<div class="volume-slider-fill" id="volume-slider-fill">
+					<div class="volume-slider-knob" id="volume-slider-knob"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="equalizer-section" id="equalizer">
+			<div class="eq-controls">
+				<h4>Equalizer</h4>
+				<button id="eq-reset-btn" title="Reset EQ"><i class="fas fa-undo"></i> Reset</button>
+				<button id="eq-close-btn" title="Close EQ"><i class="fas fa-times"> </i></button>
+			</div>
+			<div class="eq-bands">
+				<div class="eq-band">
+					<label>60 Hz</label>
+					<div class="eq-slider-container" data-band="0">
+						<div class="eq-slider-fill"></div>
+						<div class="eq-slider-knob"></div>
+					</div>
+					<span class="eq-gain-value">0 dB</span>
+				</div>
+				<div class="eq-band">
+					<label>230 Hz</label>
+					<div class="eq-slider-container" data-band="1">
+						<div class="eq-slider-fill"></div>
+						<div class="eq-slider-knob"></div>
+					</div>
+					<span class="eq-gain-value">0 dB</span>
+				</div>
+				<div class="eq-band">
+					<label>910 Hz</label>
+					<div class="eq-slider-container" data-band="2">
+						<div class="eq-slider-fill"></div>
+						<div class="eq-slider-knob"></div>
+					</div>
+					<span class="eq-gain-value">0 dB</span>
+				</div>
+				<div class="eq-band">
+					<label>3 kHz</label>
+					<div class="eq-slider-container" data-band="3">
+						<div class="eq-slider-fill"></div>
+						<div class="eq-slider-knob"></div>
+					</div>
+					<span class="eq-gain-value">0 dB</span>
+				</div>
+				<div class="eq-band">
+					<label>14 kHz</label>
+					<div class="eq-slider-container" data-band="4">
+						<div class="eq-slider-fill"></div>
+						<div class="eq-slider-knob"></div>
+					</div>
+					<span class="eq-gain-value">0 dB</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="playlist-section" id="playlist">
+			<div class="playlist-controls">
+				<select id="playlist-select" title="playlist-select">
+					<option value="default">Default Playlist</option>
+				</select>
+				<button id="new-playlist-btn" title="New Playlist" type="button"><i class="fas fa-plus"></i> New</button>
+				<input type="file" id="add-file-input" multiple accept="audio/*" title="file" style="display:none;">
+				<button id="add-file-btn" title="Add Files" type="button"><i class="fas fa-folder-plus"></i> Add</button>
+				<button id="hide-playlist-btn" title="Hide Playlist" type="button"><i class="fas fa-times"></i> Hide</button>
+			</div>
+			<ul id="playlist-tracks">
+			</ul>
+		</div>
+
+		<div id="custom-modal-overlay" class="modal-overlay">
+    <div id="custom-modal" class="modal-content">
+        <p id="modal-message">This is a sample message!</p>
+        <button id="modal-close-btn" class="modal-close-button">OK</button>
+    </div>
+</div>
+
+	</div>
+	<script src="script.js"></script>
+
+</body>
+
+</html>
