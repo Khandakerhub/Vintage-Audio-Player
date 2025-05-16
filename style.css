@@ -51,6 +51,7 @@
 			border-radius: 50%;
 			border: 1px solid #1a1a1a;
 			background-color: #111;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
 		}
 
 		#artwork {
@@ -143,7 +144,7 @@
 
 		#current-time,
 		#duration {
-            width: 46px;
+            width: 48px;
 			color: #fff;
 			font-weight: 400;
 		}
